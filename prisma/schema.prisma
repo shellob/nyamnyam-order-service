@@ -6,3 +6,19 @@ datasource db {
     provider = "postgresql"
     url =      env("DATABASE_URL")
 }
+
+model Order {
+    id String @id @default(uuid())
+    userId String
+    restaurantId String
+    totalPrice Float
+    deliveryAddress String
+    paymentMethod PaymentMethod
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum PaymentMethod {
+    YANDEX_KASSA
+    STRIPE
+}
