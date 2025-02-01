@@ -1,24 +1,41 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url =      env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Order {
-    id String @id @default(uuid())
-    userId String
-    restaurantId String
-    totalPrice Float
-    deliveryAddress String
-    paymentMethod PaymentMethod
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  userId          String
+  restaurantId    String
+  totalPrice      Float
+  deliveryAddress String
+  status          OrderStatus @default(PENDING)
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus @default(PENDING)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  DELIVERING
+  COMPLETED
+  CANCELED
 }
 
 enum PaymentMethod {
-    YANDEX_KASSA
-    STRIPE
+  YANDEX_KASSA
+  STRIPE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
 }
