@@ -1,19 +1,16 @@
-import {Controller, Post, Get, Put, Delete, Param, Body, HttpException, HttpStatus} from '@nestjs/common'
+import {Controller, Post, Get, Put, Delete, Param, Body, HttpException, HttpStatus, Patch} from '@nestjs/common'
 import { OrdersService } from './orders.service';
-import { CreateOrderDTO } from './dto/create-order.dto';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  async createOrder(@Body() data: CreateOrderDTO) {
-    try {
-      const order = await this.ordersService.createOrder(data);
-      return {message: "Order created", order}
-    } catch (error) {
-      throw new HttpException('Error creating order', HttpStatus.BAD_REQUEST);
-    }
+  async createOrder(@Body() data: CreateOrderDto) {
+    const order = await this.ordersService.createOrder(data);
+    return {message: "Order created", order}
   }
 
   @Get()
@@ -21,13 +18,22 @@ export class OrdersController {
     return this.ordersService.getAllOrders();
   }
 
-  /*@Delete()
+  @Delete()
   async deleteOrder(@Param('id') id: string) {
-    try {
       await this.ordersService.deleteOrder(id);
       return {message: 'Order deleted'};
-    } catch (error) {
-      throw new HttpException('Order not found', HttpStatus.NOT_FOUND);
-    }
-  }*/
+  }
+
+  @Patch(':id')
+  async updateOrder(@Param('id') id: string, @Body() data: UpdateOrderDto) {
+    const order = await this. ordersService.updateOrder(id, data);
+    return {message: "Order updated", order};
+  }
+
+  @Get(':id')
+  async getOrderById(@Param('id') id: string) {
+  console.log(`Received ID: ${id}`); // 👈 Логируем id
+  return this.ordersService.getOrderById(id);
+}
+
 }

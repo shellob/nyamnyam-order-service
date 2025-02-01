@@ -1,20 +1,25 @@
-import {IsNotEmpty, IsString, IsNumber} from 'class-validator'
-import { isStringObject } from 'util/types'
-// DTO (Data Transfer Object) – отвечает за валидацию входных данных.
-export class CreateOrderDTO {
-    @IsString()
-    @IsNotEmpty()
-    userId: string;
+import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { OrderStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
 
-    @IsString()
-    @IsNotEmpty()
-    restaurantId: string;
+export class CreateOrderDto {
+  @IsString()
+  userId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    deliveryAddress: string;
+  @IsString()
+  restaurantId: string;
 
-    @IsNumber()
-    totalPrice: number;
+  @IsNumber()
+  totalPrice: number;
 
+  @IsString()
+  deliveryAddress: string;
+
+  @IsEnum(OrderStatus)
+  status: OrderStatus;
+
+  @IsEnum(PaymentStatus)
+  paymentStatus: PaymentStatus;
+
+  @IsEnum(PaymentMethod)
+  paymentMethod: PaymentMethod;
 }
