@@ -18,6 +18,17 @@ model Order {
   paymentStatus   PaymentStatus @default(PENDING)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  orderStatusHistory OrderStatusHistory[]
+}
+
+model OrderStatusHistory {
+  id String @id @default(uuid())
+  orderId String
+  status OrderStatus
+  changedAt DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 enum OrderStatus {

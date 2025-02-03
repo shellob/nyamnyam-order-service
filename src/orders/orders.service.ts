@@ -3,6 +3,7 @@ import {PrismaService} from '../../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { plainToInstance } from 'class-transformer';
+import { OrderStatus } from '@prisma/client';
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService){}
@@ -28,6 +29,26 @@ export class OrdersService {
         totalPrice: true
       }
     });
+  }
+
+  async getAllOrdersSorted(queryParams: any) {
+    const {status, userId, restaurantId} = queryParams;
+
+    const filters= {} as any;
+
+    if (status) {
+      filters.status = status;
+    }
+    if (userId) {
+      filters.userId = userId;
+    }
+    if (restaurantId) {
+      filters.restaurantId = restaurantId;
+    }
+
+    return this.prisma.order.findMany({
+      where: filters
+    })
   }
 
   async getOrderById(id: string) {
@@ -70,5 +91,18 @@ export class OrdersService {
     }
   }
 
+  async updateOrderStatus(id: string, status: OrderStatus) {
+    const order = await this.prisma.order.findUnique({
+      where: {id}
+    });
 
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} is not found`);
+    }
+
+    return this.prisma.order.update({
+      where: {id},
+      data: {status}
+    });
+  }
 }
