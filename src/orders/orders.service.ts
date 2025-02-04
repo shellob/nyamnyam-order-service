@@ -1,12 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import {PrismaService} from '../../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { plainToInstance } from 'class-transformer';
 import { OrderStatus } from '@prisma/client';
+import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
 export class OrdersService {
-  constructor(private readonly prisma: PrismaService){}
+  constructor(private readonly prisma: PrismaService,
+    @Inject('ORDER_SERVICE') private readonly kafkaClient: ClientProxy){}
 
   async createOrder(data: CreateOrderDto) {
     const orderData = {
