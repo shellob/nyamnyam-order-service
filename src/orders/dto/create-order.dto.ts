@@ -2,11 +2,9 @@ import { IsEnum, IsNumber, IsString, IsUUID, Min, MaxLength, Max } from 'class-v
 import { OrderStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
 
 export class CreateOrderDto {
-  @IsString()
   @IsUUID()
   userId: string;
 
-  @IsString()
   @IsUUID()
   restaurantId: string;
 

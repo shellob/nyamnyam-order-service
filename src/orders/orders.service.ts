@@ -7,8 +7,7 @@ import { OrderStatus } from '@prisma/client';
 import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
 export class OrdersService {
-  constructor(private readonly prisma: PrismaService,
-    @Inject('ORDER_SERVICE') private readonly kafkaClient: ClientProxy){}
+  constructor(private readonly prisma: PrismaService){}
 
   async createOrder(data: CreateOrderDto) {
     const orderData = {

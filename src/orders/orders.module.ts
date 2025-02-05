@@ -5,7 +5,7 @@ import { PrismaModule } from '../../prisma/prisma.module';
 import {KafkaService} from '../kafka/kafka.service';
 @Module({
   imports: [PrismaModule],
-  providers: [OrdersService, KafkaService],
+  providers: [OrdersService],
   controllers: [OrdersController],
 })
 export class OrdersModule {}
